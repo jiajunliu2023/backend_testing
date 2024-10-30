@@ -1,0 +1,25 @@
+{
+  "name": "part4",
+  "version": "1.0.0",
+  "description": "part4 ",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env  NODE_ENV=test node --test"
+  },
+  "author": "Roger Liu",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-async-errors": "^3.1.1",
+    "mongoose": "^8.7.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.1.7",
+    "supertest": "^7.0.0"
+  }
+}
