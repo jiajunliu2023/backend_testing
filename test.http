@@ -1,14 +1,38 @@
-GET http://localhost:3003/api/blogs/67170864144bfb804c4e2ed8
+GET  http://localhost:3003/api/blogs/
 
 
 
-# PUT http://localhost:3003/api/blogs/6716fe49bb4b801870e7164b
+#  POST  http://localhost:3003/api/blogs
+#  Content-Type: application/json
+
+    
+#      {
+    
+#           "title": "Type wars",
+#           "author": "Robert C. Martin",
+#           "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+#           "likes": 2,
+#           "userid":"6753a8291cf51674628d2fc5"
+# }
+
+# post http://localhost:3003/api/login
 # Content-Type: application/json
 
 # {
-#     "title": "React patterns",
-#     "author": "Michael Chan",
-#     "url": "https://reactpatterns.com/",
-#     "likes": 10
-    
+#     "username": "mluukai",
+#     "password": "salainen"
 # }
+
+# post http://localhost:3003/api/blogs
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVrYWkiLCJpZCI6IjY3NTRhNjJhYTc0YmE2YmU5OWZjYzcyMyIsImlhdCI6MTczMzYwMjQzMn0.14s7JBX1-g9NlIoUkdOLda3FVasjDCuZ7OGlm4Q1wNg
+
+# {
+#     "title": "go to Statement Considered Harmful",
+#     "author": "edsger W. Dijkstra",
+#     "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+#     "likes": 5
+# }
+    
+           
+ 

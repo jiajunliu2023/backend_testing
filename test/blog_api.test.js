@@ -165,7 +165,7 @@ test('there are two blogs', async () => {
 
 
     //update
-    test.only('update the number likes of a blog post', async () =>{
+    test('update the number likes of a blog post', async () =>{
       const blogsAtStart = await helper.blogsInDb()
       const blogToUpdate = blogsAtStart[0]
 

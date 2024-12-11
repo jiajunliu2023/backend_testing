@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken')
+const User = require('../models/User'); 
 const logger = require("./logger")
 
 const requestLogger = (request, response, next) => {
@@ -19,13 +21,61 @@ const requestLogger = (request, response, next) => {
       return response.status(400).send({ error: 'malformatted id' })
     } else if (error.name === 'ValidationError') {
       return response.status(400).json({ error: error.message })
+    } else if (error.name === 'MongoServerError' && error.message.includes('E11000 duplicate key error')) {
+      return response.status(400).json({ error: 'expected `username` to be unique' })
+    } else if (error.name ===  'JsonWebTokenError') {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+    else if (error.name === 'TokenExpiredError') {
+      return response.status(401).json({
+        error: 'token expired'
+      })
     }
   
     next(error)
   }
+  //extract the token from the request headers and validate it.
+  const tokenExtractor = (request, response, next) =>{
+    try{
+        const authorization = request.get('authorization')
+        if (authorization && authorization.startsWith('Bearer ')){
+          request.token = authorization.replace('Bearer ','')
+
+          //store the decoded token into request.token
+        }
+        else{
+          request.token = null 
+        }
+    }
+    catch(error){
+      next(error)
+    }
+        
+      
+    }
+    //find the authenticated user and attach it to the request object.
+    const userExtractor = async (request, response, next)=>{
+      const token = request.token;
+      if (!token){
+        return response.status(401).json({error:'missing token'});
+      }
+      try{
+        const SECRET  = process.env.SECRET || 'default-fallback-secret'
+        const decodedToken = jwt.verify(token, SECRET);
+        if (!decodedToken.id){
+          return response.status(401).json({ error: 'token invalid' })
+        }
+        request.user = await User.findById(decodedToken.id)
+      }catch(error){
+        next(error)
+      }
+    }
+  
   
   module.exports = {
     requestLogger,
     unknownEndpoint,
-    errorHandler
+    errorHandler,
+    tokenExtractor,
+    userExtractor
   }

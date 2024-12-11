@@ -29,6 +29,10 @@ const nonExistingId = async () => {
   return blog.id.toString()
 }
 
+const getInvalidUserToken = async () =>{
+  return "default-token"
+}
+
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
