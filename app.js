@@ -29,9 +29,12 @@ app.use(express.static('dist'))
 app.use(express.json()) // parsing
 app.use(middleware.requestLogger)
 
-//middleware.tokenExtractor and middleware.userExtractor are applied globally to the 
+//middleware.tokenExtractor applied globally 
+
+// middleware.userExtractor are applied  to the 
 //all routes in '/api/blogs'
-app.use('/api/blogs', middleware.tokenExtractor, middleware.userExtractor, blogsRouter)
+app.use(middleware.tokenExtractor)
+app.use('/api/blogs', middleware.userExtractor,blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 
@@ -39,6 +42,5 @@ app.use('/api/login', loginRouter)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
-app.use(middleware.tokenExtractor)
 
 module.exports = app

@@ -36,39 +36,39 @@ const requestLogger = (request, response, next) => {
   }
   //extract the token from the request headers and validate it.
   const tokenExtractor = (request, response, next) =>{
-    try{
+    
         const authorization = request.get('authorization')
         if (authorization && authorization.startsWith('Bearer ')){
-          request.token = authorization.replace('Bearer ','')
+          request.token = authorization.replace('Bearer ', '')
+          
 
           //store the decoded token into request.token
         }
         else{
+          
           request.token = null 
         }
-    }
-    catch(error){
-      next(error)
-    }
+        next();
+    
         
       
     }
     //find the authenticated user and attach it to the request object.
     const userExtractor = async (request, response, next)=>{
+      
       const token = request.token;
       if (!token){
         return response.status(401).json({error:'missing token'});
       }
-      try{
+      
         const SECRET  = process.env.SECRET || 'default-fallback-secret'
         const decodedToken = jwt.verify(token, SECRET);
         if (!decodedToken.id){
           return response.status(401).json({ error: 'token invalid' })
         }
         request.user = await User.findById(decodedToken.id)
-      }catch(error){
-        next(error)
-      }
+        next();
+      
     }
   
   

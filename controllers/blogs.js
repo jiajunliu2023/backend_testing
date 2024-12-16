@@ -10,6 +10,7 @@ const Blog = require('../models/blog')
 const User = require('../models/User')
 
 
+
 // blogsRouter.get('/', (request, response) => {
 //     Blog
 //       .find({})
@@ -20,8 +21,13 @@ const User = require('../models/User')
 
 
 //when displaying the blogs, the corresponding user with username and name will be shown
-blogsRouter.get('/', async (request, response)=>{
-  const blogs = await Blog.find({}).populate('user',{username:1, name:1})
+blogsRouter.get('/',async (request, response)=>{
+  const user = request.user;
+  if (!user){
+    return response.status(401).json({ error: 'unauthorized' }); 
+  }
+  //filter to show only blogs corresponding to authorized user
+  const blogs = await Blog.find({user: user.id}).populate('user',{username:1, name:1})
   response.json(blogs)
 })
 
@@ -58,7 +64,7 @@ blogsRouter.get('/:id', async(request, res, next)=>{
 //     return null
 // }
 
-blogsRouter.delete('/:id', async (req, rep, next) =>{
+blogsRouter.delete('/:id',  async (req, rep, next) =>{
   try{
     const blog = await Blog.findById(req.params.id)
 
@@ -76,7 +82,7 @@ blogsRouter.delete('/:id', async (req, rep, next) =>{
   }
 })
 
-blogsRouter.post('/', async (request, response, next) => {
+blogsRouter.post('/',  async (request,  response, next) => {
 
   //the user id is not require, as the user id can be got through from the authorized user through authorization
   const {title, url, author, likes, userid } = request.body;
